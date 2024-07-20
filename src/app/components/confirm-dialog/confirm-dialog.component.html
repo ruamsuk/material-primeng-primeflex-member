@@ -1,0 +1,18 @@
+<mat-toolbar mat-dialog-title>
+  <span class="prompt text-2xl font-semibold text-red-800">{{data.title}}</span>
+</mat-toolbar>
+
+<hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
+
+<div mat-dialog-content class="mt-5">
+  <span class="tasadith text-2xl font-bold text-red-600">
+    {{data.message}}
+  </span>
+</div>
+
+<hr class="h-px bg-gray-200 border-0 dark:bg-gray-700">
+
+<div style="float:right;margin:20px;" class="prompt-font">
+  <button mat-raised-button color="warn" style="margin: 0 10px;" [mat-dialog-close]="true">ยืนยัน</button>
+  <button mat-raised-button  [mat-dialog-close]="false">ยกเลิก</button>
+</div>
