@@ -14,6 +14,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { environment } from '../environments/environment';
 import { MessageService } from 'primeng/api';
 import { ThaiDatepickerModule } from './thai-datepicker/thai-datepicker.module';
+import { DialogService } from 'primeng/dynamicdialog';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import firebase from 'firebase/compat/app';
+
+firebase.initializeApp(environment.firbaseConfig);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,6 +36,8 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimationsAsync(),
     importProvidersFrom(ThaiDatepickerModule),
-    MessageService
+    MessageService,
+    DialogService,
+    AngularFireAuth,
   ]
 };

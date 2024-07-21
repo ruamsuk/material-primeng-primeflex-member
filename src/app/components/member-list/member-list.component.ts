@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { MemberDetailComponent } from '../member-detail/member-detail.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @UntilDestroy({arrayName: 'subscriptions'})
 @Component({
@@ -19,9 +20,16 @@ import { MemberDetailComponent } from '../member-detail/member-detail.component'
     HomeComponent,
     ImportsModule,
     ThaiDatePipe,
+    MatProgressSpinner,
   ],
   template: `
-    <app-home xmlns="http://www.w3.org/1999/html"/>
+    <app-home />
+
+    @if (loading) {
+      <div class="loading-shade">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
 
     <div class="flex justify-content-center align-items-center">
       <div class="card shadow-2 mt-3" [style]="{ width: '600px' }">
@@ -54,6 +62,7 @@ import { MemberDetailComponent } from '../member-detail/member-detail.component'
                   pInputText
                   pTooltip="ค้นหาข้อมูล"
                   tooltipPosition="bottom"
+                  placeholder="ค้นหา ชื่อ หรือนามสกุล..."
                   type="text"
                   (input)="dt.filterGlobal(getValue($event), 'contains')"
                 >
@@ -145,7 +154,7 @@ export class MemberListComponent implements OnInit {
   members!: Member[];
   member!: Member;
   layout: string = 'list';
-  loading: unknown;
+  loading: boolean = false;
 
   isAlive!: boolean;
   rank: string[] = [
@@ -158,6 +167,7 @@ export class MemberListComponent implements OnInit {
   }
 
   loadMembers() {
+    this.loading = true;
     this.memberService
       .loadMembers()
       .pipe(
@@ -166,7 +176,12 @@ export class MemberListComponent implements OnInit {
       .subscribe({
         next: (member: Member[]) => {
           this.members = member;
-        }
+          this.loading = false;
+        },
+        error: (err: Error) => {
+          this.memberService.showError(`Unable to load member ${err}`);
+        },
+        complete: () => this.loading = false
       });
   }
 

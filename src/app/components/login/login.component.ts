@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -15,6 +15,9 @@ import { ToastModule } from 'primeng/toast';
 import { Router, RouterLink } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
 import { NgIf } from '@angular/common';
+import { ImportsModule } from '../../imposts';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 
 interface LogInForm {
   email: FormControl<string>;
@@ -33,7 +36,8 @@ interface LogInForm {
     ToastModule,
     RouterLink,
     PasswordModule,
-    NgIf
+    NgIf,
+    ImportsModule
   ],
   template: `
     <p-toast/>
@@ -67,6 +71,12 @@ interface LogInForm {
                      *ngIf="isValidPassword as messages">
                 {{ messages }}
               </small>
+              <div class="mt-2">
+                <span style="cursor: pointer"
+                      class="sarabun text-blue-600 hover:text-red-600" (click)="forgotPassword()">
+                  ลืมรหัสผ่าน
+                </span>
+              </div>
             </div>
           </ng-template>
           <ng-template pTemplate="footer">
@@ -89,15 +99,21 @@ interface LogInForm {
       </form>
     </div>
   `,
-  styles: ``,
+  styles: `
+    span > .forgot:hover {
+      color: #f20a50 !important;
+    }`,
   // providers: [MessageService]
 })
-export class LogInComponent {
+export class LogInComponent implements OnDestroy {
   loading: boolean = false;
+  ref!: DynamicDialogRef;
 
   formBuilder = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  authService = inject(AuthService);
+  router = inject(Router);
+  dialogService = inject(DialogService);
+
 
   form: FormGroup<LogInForm> = this.formBuilder.group({
     email: this.formBuilder.control('', {
@@ -148,7 +164,8 @@ export class LogInComponent {
       this.load(false);
       this.authService.showSuccess('Successfully logged in');
       setTimeout(() => {
-        this.router.navigateByUrl('/') }, 1500);
+        this.router.navigateByUrl('/');
+      }, 1500);
     } catch (error) {
       this.authService.showError(`Unable to log in: ${error}`);
       this.load(false);
@@ -160,4 +177,19 @@ export class LogInComponent {
     this.loading = style;
   }
 
+  forgotPassword() {
+    this.ref = this.dialogService.open(ForgotPasswordComponent, {
+      header: 'Forgot Password',
+      width: '50vw',
+      modal: true,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw',
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.ref) this.ref.close();
+  }
 }

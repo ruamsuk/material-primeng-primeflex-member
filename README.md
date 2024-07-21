@@ -41,3 +41,9 @@ styleClass="p-datatable-striped"
 ท้ายสุด คือตารางของ PrimeNg สวยงามใช้งานง่ายนะขอบอก
 
 ![Table, PrimeNg Table](public/images/prime-table.jpg)
+
+---
+
+**_เพิ่มเติม_** แสดงโหลด และลืมพาสเวิร์ด ส่งอีเมล์รีเซทพาสเวิร์ด
+
+---

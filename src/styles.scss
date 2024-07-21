@@ -70,3 +70,57 @@ body {
     font-family: 'Sarabun', sans-serif !important;
   }
 }
+
+/* mat-confirm-dialog (customised dialog) */
+.confirm-dialog-container .mat-dialog-container {
+  border-radius: .25em .25em .4em .4em;
+  padding: 0;
+}
+.confirm-dialog-container .content-container{
+  margin: 5px 5px 15px 5px;
+  color: #8f9cb5;
+  display: flex;
+}
+.confirm-dialog-container #close-icon{
+  margin-left: auto;
+  order: 2;
+  font-weight: bolder;
+}
+.confirm-dialog-container #close-icon:hover{
+  cursor: pointer;
+}
+
+.confirm-dialog-container #no-button{
+  height: 50px;
+  width: 50%;
+  background-color: #fc7169;
+  color:white;
+  border-radius: 0;
+}
+
+.confirm-dialog-container #yes-button{
+  height: 50px;
+  width: 50%;
+  background-color: #b6bece;
+  color:white;
+  border-radius: 0;
+}
+
+.confirm-dialog-container span.content-span {
+  padding: 35px 16px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

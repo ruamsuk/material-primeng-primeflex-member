@@ -93,4 +93,8 @@ export class AuthService {
     const docRef = doc(this.firestore, `members/${id}`);
     return from(deleteDoc(docRef));
   }
+
+  send() {
+
+  }
 }
