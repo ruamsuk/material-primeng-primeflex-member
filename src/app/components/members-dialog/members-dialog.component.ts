@@ -46,10 +46,14 @@ import { AuthService } from '../../services/auth.service';
     MatDialogClose
   ],
   template: `
-    <mat-toolbar mat-dialog-title>
+    <div class="flex justify-content-center align-items-center mt-3 ">
+      <h2 class="tasadith text-3xl font-bold {{ data ? 'text-orange-600' : 'text-green-600'}} mat-dialog-title">
+        {{ data ? 'แก้ไขข้อมูลสมาชิก' : 'เพิ่มสมาชิกใหม่' }}
+      </h2>
+    </div>
 
-    </mat-toolbar>
     <form [formGroup]="memForm" (ngSubmit)="onSubmit()">
+      <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700 ml-4 mr-4">
       <mat-dialog-content>
         <div class="row">
           <mat-form-field appearance="outline">
@@ -130,13 +134,13 @@ import { AuthService } from '../../services/auth.service';
           <mat-radio-group
             aria-labelledby="example" formControlName="alive">
             @for (stat of status; track $index) {
-              <mat-radio-button class="" [value]="stat">{{stat}}</mat-radio-button>
+              <mat-radio-button class="" [value]="stat">{{ stat }}</mat-radio-button>
             }
           </mat-radio-group>
         </div>
       </mat-dialog-content>
       <div mat-dialog-actions>
-        <button [disabled]="memForm.invalid" mat-button type="button" [mat-dialog-close]="true">Cancel</button>
+        <button mat-button type="button" [mat-dialog-close]="true">Cancel</button>
         <button [disabled]="memForm.invalid" mat-button type="submit">{{ data ? 'Update' : 'Save' }}</button>
       </div>
     </form>

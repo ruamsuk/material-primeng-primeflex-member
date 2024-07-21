@@ -98,8 +98,8 @@ import { ImportsModule } from '../../imposts';
 export class HomeComponent implements OnInit {
   items: MenuItem[] | undefined;
 
-  public authService = inject(AuthService);
-  private router = inject(Router);
+  authService = inject(AuthService);
+  router = inject(Router);
 
   ngOnInit() {
 
@@ -115,11 +115,11 @@ export class HomeComponent implements OnInit {
           this.router.navigate(['/member']);
         }
       },
-      {
-        label: 'Credit',
-        route: '/credit',
-        icon: 'pi pi-credit-card',
-      },
+      // {
+      //   label: 'Credit',
+      //   route: '/credit',
+      //   icon: 'pi pi-credit-card',
+      // },
       {
         label: 'Logout', command: () => this.logout(),
         icon: 'pi pi-sign-out',

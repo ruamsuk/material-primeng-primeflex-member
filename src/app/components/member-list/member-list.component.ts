@@ -6,9 +6,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ImportsModule } from '../../imposts';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { CountAgeService } from '../../services/count-age.service';
-import { DropdownChangeEvent } from 'primeng/dropdown';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../../dialog/dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { MemberDetailComponent } from '../member-detail/member-detail.component';
@@ -147,10 +145,6 @@ export class MemberListComponent implements OnInit {
   members!: Member[];
   member!: Member;
   layout: string = 'list';
-  visible: boolean = false;
-  searchKey!: string;
-  sortField!: string;
-  sortOrder: number = 1;
   loading: unknown;
 
   isAlive!: boolean;
@@ -181,7 +175,6 @@ export class MemberListComponent implements OnInit {
   }
 
   deleteItem(data: Member) {
-    console.log(data.id);
     const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: 'Confirm Delete Member',
@@ -191,7 +184,6 @@ export class MemberListComponent implements OnInit {
     confirmDialog.afterClosed()
       .subscribe(result => {
         if (result) {
-          console.log(result);
           let id = data.id;
           this.memberService
             .deleteMember(id)
@@ -211,32 +203,16 @@ export class MemberListComponent implements OnInit {
   }
 
   onUpdate(data: any) {
-    const dialogRef = this.dialog.open(MembersDialogComponent, {
+    this.dialog.open(MembersDialogComponent, {
       data: data
     });
   }
 
   openNew() {
-    const dialogRef = this.dialog.open(MembersDialogComponent, {});
+    this.dialog.open(MembersDialogComponent, {});
   }
-
-/*
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
-    this.sortField = filterValue;
-  }
-*/
-
-
-/*
-  change($event: DropdownChangeEvent) {
-    let data = $event.value;
-    console.log(data);
-  }
-*/
 
   onDetail(member: any) {
-    const dialogRef = this.dialog.open(MemberDetailComponent, { data: member})
+    this.dialog.open(MemberDetailComponent, {data: member});
   }
 }

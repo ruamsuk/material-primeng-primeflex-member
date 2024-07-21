@@ -13,6 +13,8 @@ import { MatChipListbox, MatChipOption } from '@angular/material/chips';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDivider } from '@angular/material/divider';
+import { MatTable } from '@angular/material/table';
+import { ImportsModule } from '../../imposts';
 
 @Component({
   selector: 'app-member-detail',
@@ -27,7 +29,9 @@ import { MatDivider } from '@angular/material/divider';
     MatDialogContent,
     MatDialogTitle,
     MatToolbarModule,
-    MatDivider
+    MatDivider,
+    MatTable,
+    ImportsModule
   ],
   template: `
     <mat-toolbar>
@@ -71,10 +75,10 @@ import { MatDivider } from '@angular/material/divider';
             </mat-chip-listbox>
           </td>
         </tr>
-        <tr>
+        <tr class="">
           <th>สถานะ:</th>
           <td>
-        <span class="{{users.alive == 'เสียชีวิตแล้ว' ? 'text-amber-500' : 'text-emerald-800'}} font-semibold">
+        <span class="{{users.alive == 'เสียชีวิตแล้ว' ? 'text-orange-600' : 'text-green-600'}} font-semibold">
           {{ users.alive }}
         </span>
           </td>
@@ -93,6 +97,7 @@ import { MatDivider } from '@angular/material/divider';
       font-size: 18px;
       margin-bottom: 1rem;
       color: #212529;
+      width: 100%;
     }
 
     .table th,
@@ -100,6 +105,7 @@ import { MatDivider } from '@angular/material/divider';
       padding: 2rem;
       vertical-align: top;
       border-top: 1px solid #c7cacb;
+      overflow: hidden;
     }
 
     table th {
