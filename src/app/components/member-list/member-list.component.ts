@@ -5,7 +5,6 @@ import { AuthService } from '../../services/auth.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ImportsModule } from '../../imposts';
 import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
-import { CountAgeService } from '../../services/count-age.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
@@ -47,20 +46,22 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
           [rowsPerPageOptions]="[5, 10, 30]"
           [loading]="loading"
           [paginator]="true"
-          [globalFilterFields]="['firstname', 'lastname']"
+          [globalFilterFields]="['firstname', 'lastname', 'province']"
           styleClass="p-datatable-striped"
           [tableStyle]="{ 'min-width': '20rem' }">
 
           <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-              <span><p-button (click)="openNew()" size="small" icon="pi pi-plus"/></span>
+              <span>
+                <p-button (click)="openNew()" size="small" icon="pi pi-plus"/>
+              </span>
               <p-iconField iconPosition="left" class="ml-auto">
                 <p-inputIcon>
                   <i class="pi pi-search"></i>
                 </p-inputIcon>
                 <input
                   pInputText
-                  pTooltip="ค้นหาข้อมูล"
+                  pTooltip="ค้นหาชื่อ หรือนามสกุล หรือจังหวัด"
                   tooltipPosition="bottom"
                   placeholder="ค้นหา ชื่อ หรือนามสกุล..."
                   type="text"
@@ -146,8 +147,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   `,
 })
 export class MemberListComponent implements OnInit {
-  public memberService = inject(AuthService);
-  public calAge = inject(CountAgeService);
+  memberService = inject(AuthService);
   data = model('');
   dialog = inject(MatDialog);
 
@@ -155,8 +155,6 @@ export class MemberListComponent implements OnInit {
   member!: Member;
   layout: string = 'list';
   loading: boolean = false;
-
-  isAlive!: boolean;
   rank: string[] = [
     'ร.ต.อ.', 'พ.ต.ต.', 'พ.ต.ท.', 'พ.ต.อ.'
   ];
@@ -203,7 +201,7 @@ export class MemberListComponent implements OnInit {
           this.memberService
             .deleteMember(id)
             .subscribe({
-              next: value => {
+              next: () => {
                 this.memberService.showWarn('Deleted Member successfully.');
               },
               complete: () => {

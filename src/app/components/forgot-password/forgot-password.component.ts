@@ -45,15 +45,15 @@ import firebase from 'firebase/compat/app';
   styles: ``
 })
 export class ForgotPasswordComponent {
-  authService = inject(AuthService); //inject(AngularFireAuth);
+  authService = inject(AuthService);
   router = inject(Router);
   ref = inject(DynamicDialogRef);
 
   resetPassword(email: string) {
     const auth = firebase.auth();
     auth.sendPasswordResetEmail(email)
-      .then((response) => {
-        this.authService.showSuccess('ส่งอีเมล์สำหรับพลาสเวิร์ดใหม่แล้ว');
+      .then(() => {
+        this.authService.showSuccess('ส่งอีเมล์สำหรับพาสเวิร์ดใหม่แล้ว');
         this.router.navigateByUrl('/auth/login');
         this.ref.close();
       }).catch((error) => {

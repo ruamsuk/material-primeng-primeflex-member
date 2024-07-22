@@ -2,8 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   Auth,
   authState,
-  signInWithEmailAndPassword,
-  UserCredential
+  signInWithEmailAndPassword
 } from '@angular/fire/auth';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';

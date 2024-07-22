@@ -3,7 +3,6 @@ import {
   MAT_DIALOG_DATA,
   MatDialogClose,
   MatDialogContent,
-  MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,16 +22,9 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./confirm-dialog.component.scss']
 })
 export class ConfirmDialogComponent {
-  title!: string;
-  message!: string;
 
   constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-  }
+  ) { }
 
-  closeDialog() {
-    this.dialogRef.close(false);
-  }
 }

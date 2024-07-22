@@ -4,7 +4,7 @@ import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
-  MatDialogRef, MatDialogTitle
+  MatDialogTitle
 } from '@angular/material/dialog';
 import { CountAgeService } from '../../services/count-age.service';
 import { Member } from '../../models/member.model';
@@ -112,6 +112,7 @@ import { ImportsModule } from '../../imposts';
       text-align: right;
       padding-right: 5px;
       height: 2rem;
+      width: 36%
     }
 
     .table-striped tbody tr:nth-of-type(odd) {
@@ -129,8 +130,7 @@ export class MemberDetailComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public user: any,
-    private dialogRef: MatDialogRef<MemberDetailComponent>,
-    private countAge: CountAgeService
+    countAge: CountAgeService
   ) {
     if (this.user) {
       this.users = this.user;

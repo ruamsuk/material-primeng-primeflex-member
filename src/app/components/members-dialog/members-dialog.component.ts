@@ -6,7 +6,6 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
-import { MembersListComponent } from '../members-list/members-list.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ImportsModule } from '../../imposts';
 import { MatButton } from '@angular/material/button';
@@ -19,6 +18,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatToolbar } from '@angular/material/toolbar';
 import { NgForOf } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { MembersListComponent } from '../members-list/members-list.component';
 
 @Component({
   selector: 'app-members-dialog',
@@ -158,7 +158,6 @@ export class MembersDialogComponent implements OnInit {
     'ร.ต.อ.', 'พ.ต.ต.', 'พ.ต.ท.', 'พ.ต.อ.'
   ];
   status : string[] = ['ยังมีชีวิต', 'เสียชีวิตแล้ว'];
-  _isAlive!: string;
 
   constructor(
     public dialogRef: MatDialogRef<MembersListComponent>,
@@ -203,7 +202,6 @@ export class MembersDialogComponent implements OnInit {
 
   onSubmit() {
     const memData = this.memForm.value;
-    console.log(this.memForm.controls['alive'].value);
 
     if (this.data) {
       this.authService
