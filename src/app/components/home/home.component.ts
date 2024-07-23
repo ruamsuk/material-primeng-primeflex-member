@@ -145,6 +145,7 @@ export class HomeComponent implements OnInit {
     ];
 
   }
+  //
 
   private logout() {
     this.authService.logout().catch();

@@ -13,6 +13,7 @@ import { HomeComponent } from './components/home/home.component';
 })
 export class AppComponent implements OnInit {
   auth: AuthService = inject(AuthService);
+  // title
 
   ngOnInit() {
     /**  user is logged in or not */

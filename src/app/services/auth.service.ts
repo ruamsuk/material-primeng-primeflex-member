@@ -48,6 +48,7 @@ export class AuthService {
   //     credential.password
   //   );
   // }
+  //
 
   signIn(credential: Credential): Observable<void> {
     const promise = signInWithEmailAndPassword(
