@@ -150,27 +150,53 @@ export class LogInComponent implements OnDestroy {
     }
   }
 
-  async login() {
-    if (this.form.invalid) return;
-
+  login(): void {
     this.load(true);
 
     const credential: Credential = {
       email: this.form.value.email || '',
       password: this.form.value.password || '',
     };
-    try {
-      await this.authService.logInWithEmailAndPassword(credential);
-      this.load(false);
-      this.authService.showSuccess('Successfully logged in');
-      setTimeout(() => {
-        this.router.navigateByUrl('/');
-      }, 1500);
-    } catch (error) {
-      this.authService.showError(`Unable to log in: ${error}`);
-      this.load(false);
-    }
+    this.authService
+      .signIn(credential)
+      .subscribe({
+        next: () => {
+          this.authService.showSuccess('Successfully logged in');
+          setTimeout(() => {
+            this.router.navigateByUrl('/');
+          }, 1000);
+        },
+        error: (err) => {
+          this.authService.showError(`Unable to login: ${err.code}`);
+          this.load(false);
+        },
+        complete: () => {
+          this.load(false);
+        },
+      });
   }
+
+  // async login() {
+  //   if (this.form.invalid) return;
+  //
+  //   this.load(true);
+  //
+  //   const credential: Credential = {
+  //     email: this.form.value.email || '',
+  //     password: this.form.value.password || '',
+  //   };
+  //   try {
+  //     await this.authService.logInWithEmailAndPassword(credential);
+  //     this.load(false);
+  //     this.authService.showSuccess('Successfully logged in');
+  //     setTimeout(() => {
+  //       this.router.navigateByUrl('/');
+  //     }, 1500);
+  //   } catch (error) {
+  //     this.authService.showError(`Unable to log in: ${error}`);
+  //     this.load(false);
+  //   }
+  // }
 
 
   load(style: boolean) {

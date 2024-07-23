@@ -48,7 +48,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
           [paginator]="true"
           [globalFilterFields]="['firstname', 'lastname', 'province']"
           styleClass="p-datatable-striped"
-          [tableStyle]="{ 'min-width': '20rem' }">
+          [tableStyle]="{ 'min-width': '25rem' }">
 
           <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">

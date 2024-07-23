@@ -30,22 +30,30 @@ export interface Credential {
 })
 export class AuthService {
 
-  private auth = inject(Auth);
-  private router = inject(Router);
-  private firestore: Firestore = inject(Firestore);
+  auth = inject(Auth);
+  router = inject(Router);
+  firestore: Firestore = inject(Firestore);
   messageService = inject(MessageService);
   readonly authState$ = authState(this.auth);
 
-  logInWithEmailAndPassword(credential: Credential) {
-    return signInWithEmailAndPassword(
-      this.auth,
-      credential.email,
-      credential.password
-    );
+  // logInWithEmailAndPassword(credential: Credential) {
+  //   return signInWithEmailAndPassword(
+  //     this.auth,
+  //     credential.email,
+  //     credential.password
+  //   );
+  // }
+
+  signIn(credential: Credential): Observable<void> {
+    const promise = signInWithEmailAndPassword(
+      this.auth, credential.email, credential.password
+    ).then(() => {});
+
+    return from(promise);
   }
 
-  logout() {
-    this.auth.signOut().then(() => {
+ async logout() {
+   await this.auth.signOut().then(() => {
         this.router.navigateByUrl('/auth/login').finally()
       }
     );
@@ -93,7 +101,4 @@ export class AuthService {
     return from(deleteDoc(docRef));
   }
 
-  send() {
-
-  }
 }
