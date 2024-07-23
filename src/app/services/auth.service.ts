@@ -1,8 +1,8 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   Auth,
   authState,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword, user
 } from '@angular/fire/auth';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -23,6 +23,7 @@ import { Member } from '../models/member.model';
 export interface Credential {
   email: string;
   password: string;
+  displayName?: string;
 }
 
 @Injectable({
@@ -35,6 +36,10 @@ export class AuthService {
   firestore: Firestore = inject(Firestore);
   messageService = inject(MessageService);
   readonly authState$ = authState(this.auth);
+
+  user$ = user(this.auth);
+  /** user logged in or not */
+  currentUserSig = signal<Credential | null | undefined>(undefined)
 
   // logInWithEmailAndPassword(credential: Credential) {
   //   return signInWithEmailAndPassword(

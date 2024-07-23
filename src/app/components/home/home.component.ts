@@ -72,13 +72,14 @@ import { ImportsModule } from '../../imposts';
           <ng-container>
             <a [routerLink]="item.route" class="p-menuitem-link">
               <span [class]="item.icon"></span>
-              <span class="ml-2">{{item.label}}</span>
+              <span class="ml-2">{{ item.label }}</span>
             </a>
           </ng-container>
         </ng-template>
         <ng-template pTemplate="end">
 
           <div class="flex align-items-center gap-2">
+            <span class="text-blue-600">User: {{ userDetail }}</span>
             <p-button
               [text]="true"
               size="small"
@@ -88,6 +89,7 @@ import { ImportsModule } from '../../imposts';
               tooltipPosition="right"
               (click)="authService.logout()"
             />
+
           </div>
         </ng-template>
       </p-menubar>
@@ -97,11 +99,27 @@ import { ImportsModule } from '../../imposts';
 })
 export class HomeComponent implements OnInit {
   items: MenuItem[] | undefined;
+  userDetail: string | undefined | null = null;
 
   authService = inject(AuthService);
   router = inject(Router);
 
   ngOnInit() {
+    /**  user is logged in or not */
+    this.authService.user$.subscribe((user: any) => {
+      if (user) {
+        this.authService.currentUserSig.set({
+          email: user.email,
+          displayName: user.displayName, password: ''
+        });
+        this.userDetail = this.authService.currentUserSig()?.email
+          ? this.authService.currentUserSig()?.email
+          : this.authService.currentUserSig()?.displayName;
+      } else {
+        this.authService.currentUserSig.set(null);
+      }
+      // console.log(this.authService.currentUserSig());
+    });
 
     this.items = [
       {
@@ -129,6 +147,6 @@ export class HomeComponent implements OnInit {
   }
 
   private logout() {
-    this.authService.logout();
+    this.authService.logout().catch();
   }
 }
