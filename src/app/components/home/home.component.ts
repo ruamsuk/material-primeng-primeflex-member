@@ -124,6 +124,7 @@ export class HomeComponent implements OnInit {
     this.items = [
       {
         label: 'Home',
+        route: 'landing',
         icon: 'pi pi-home'
       },
       {

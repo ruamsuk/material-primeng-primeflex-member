@@ -1,4 +1,4 @@
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, inject, model, OnDestroy, OnInit } from '@angular/core';
 import { HomeComponent } from '../home/home.component';
 import { Member } from '../../models/member.model';
 import { AuthService } from '../../services/auth.service';
@@ -10,6 +10,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
 import { MemberDetailComponent } from '../member-detail/member-detail.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { MembersDetailComponent } from '../members-detail/members-detail.component';
 
 @UntilDestroy({arrayName: 'subscriptions'})
 @Component({
@@ -22,8 +24,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatProgressSpinner,
   ],
   template: `
-    <app-home />
-
     @if (loading) {
       <div class="loading-shade">
         <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -98,7 +98,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
                           [outlined]="true"
                           size="small"
                           [rounded]="true" severity="info"
-                          icon="pi pi-list" (click)="onDetail(member)"/>
+                          icon="pi pi-list" (click)="showDialog(member)"/>
                 <p-button class="mr-1"
                           pTooltip="แก้ไขข้อมูล"
                           tooltipPosition="bottom"
@@ -113,6 +113,12 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
                   size="small"
                   [rounded]="true" severity="danger"
                   icon="pi pi-trash" (click)="deleteItem(member)"/>
+                <!-- template -->
+                <!--<p-button
+                  [outlined]="true"
+                  size="small"
+                  severity="info"
+                  icon="pi pi-android" (click)="showDialog(member)"/>-->
               </td>
             </tr>
           </ng-template>
@@ -146,10 +152,13 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     }
   `,
 })
-export class MemberListComponent implements OnInit {
+export class MemberListComponent implements OnInit, OnDestroy {
   memberService = inject(AuthService);
   data = model('');
   dialog = inject(MatDialog);
+
+  dialogService = inject(DialogService);
+  ref: DynamicDialogRef | undefined;
 
   members!: Member[];
   member!: Member;
@@ -195,7 +204,7 @@ export class MemberListComponent implements OnInit {
       }
     });
     confirmDialog.afterClosed()
-      .subscribe(result => {
+      .subscribe((result: any) => {
         if (result) {
           let id = data.id;
           this.memberService
@@ -225,7 +234,29 @@ export class MemberListComponent implements OnInit {
     this.dialog.open(MembersDialogComponent, {});
   }
 
+  /** MatDialog */
   onDetail(member: any) {
     this.dialog.open(MemberDetailComponent, {data: member});
+  }
+
+  /** PrimeNG Dialog */
+  showDialog(member: any) {
+    this.ref = this.dialogService
+      .open(MembersDetailComponent, {
+        data: member,
+        header: 'รายละเอียดสมาชิก',
+        width: '40vw',
+        contentStyle: { overflowX: 'auto' },
+        breakpoints: {
+          '960px': '75vw',
+          '648': '100vw'
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 }

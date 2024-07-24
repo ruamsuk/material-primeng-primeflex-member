@@ -1,5 +1,8 @@
 <p-toast/>
 
+@if (auth.currentUserSig()) {
+  <app-home />
+}
 <router-outlet/>
 
 

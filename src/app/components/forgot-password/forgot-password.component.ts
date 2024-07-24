@@ -57,7 +57,7 @@ export class ForgotPasswordComponent {
         this.router.navigateByUrl('/auth/login');
         this.ref.close();
       }).catch((error) => {
-        this.authService.showError(`${error}`);
+        this.authService.showError(`${error.message}`);
     })
       .finally();
   }

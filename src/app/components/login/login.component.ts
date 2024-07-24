@@ -163,7 +163,7 @@ export class LogInComponent implements OnDestroy {
         next: () => {
           this.authService.showSuccess('Successfully logged in');
           setTimeout(() => {
-            this.router.navigateByUrl('/');
+            this.router.navigateByUrl('/landing');
           }, 1000);
         },
         error: (err) => {
