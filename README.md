@@ -47,3 +47,32 @@ styleClass="p-datatable-striped"
 **_เพิ่มเติม_** แสดงโหลด และลืมพาสเวิร์ด ส่งอีเมล์รีเซทพาสเวิร์ด
 
 ---
+
+### ปัญหาที่พบ
+
+- ตอน build จะเกิดข้อผิดพลาด แก้ไขโดย.-
+
+```typescript
+ng build --allowed-common-js-dependencies *  --base-href  https://member-dc3a5.web.app  
+```
+- ในไฟล์ tsconfig
+```html
+ในไฟล์ tsconfig.json ตั้งค่า "allowSyntheticDefaultImports": true ในส่วนของ compilerOptions 
+ค่านี้อนุญาตให้ใช้ default imports จาก CommonJS modules ได้
+```
+- ถ้าตอน build ไม่ใส่ --base-href ... จะมีข้อความเตือนแบบนี้.-
+```html
+No Firebase app associated with site member-dc3a5, injecting project default config.
+  You can link a Web app to a Hosting site here https://console.firebase.google.com/project/member-dc3a5/settings/general/web
+
+```
+- ต้องไม่ลืมใส่ --base-href ... (my url)
+- error -> ponycode is deprecated.... ลงโปรแกรม nvm แล้วรัน
+```html
+nvm install 20.10.0
+nvm use 20.10.0
+```
+- ดูเวอร์ชั่น node.js ที่เป็น LTS 
+- thank a lot _copilot, stack overflow & angular.dev/tools_
+
+---
