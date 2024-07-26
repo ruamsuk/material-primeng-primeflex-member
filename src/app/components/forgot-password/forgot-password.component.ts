@@ -6,6 +6,9 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ImportsModule } from '../../imposts';
 import { MatError, MatInputModule } from '@angular/material/input';
 
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { environment } from '../../../environments/environment';
+
 import firebase from 'firebase/compat/app';
 
 @Component({
@@ -27,7 +30,7 @@ import firebase from 'firebase/compat/app';
                id="email"
                class="flex-auto" placeholder="อีเมล์ที่ลงทะเบียนไว้"
                autocomplete="off"
-               />
+        />
       </div>
     </div>
     <div class="flex justify-content-center">
@@ -42,24 +45,27 @@ import firebase from 'firebase/compat/app';
         size="small" severity="info"/>
     </div>
   `,
-  styles: ``
+  styles: ``,
+  providers: [
+    {
+      provide: FIREBASE_OPTIONS, useValue: environment.firbaseConfig
+    },
+  ]
 })
 export class ForgotPasswordComponent {
   authService = inject(AuthService);
   router = inject(Router);
   ref = inject(DynamicDialogRef);
 
-  resetPassword(email: string) {
-    const auth = firebase.auth();
-    auth.sendPasswordResetEmail(email)
-      .then(() => {
-        this.authService.showSuccess('ส่งอีเมล์สำหรับพาสเวิร์ดใหม่แล้ว');
-        this.router.navigateByUrl('/auth/login');
-        this.ref.close();
-      }).catch((error) => {
-        this.authService.showError(`${error.message}`);
-    })
-      .finally();
+  async resetPassword(email: string) {
+
+    await firebase.auth().sendPasswordResetEmail(email).then(() => {
+      this.authService.showSuccess('ส่งอีเมล์สำหรับพาสเวิร์ดใหม่แล้ว');
+      this.router.navigateByUrl('/auth/login').then();
+      this.ref.close();
+    }).catch((error) => {
+      this.authService.showError(`${error.message}`);
+    });
   }
 
   hide() {

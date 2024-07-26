@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
     this.auth.user$.subscribe((user: any) => {
       if (user) {
         this.auth.currentUserSig.set({
+          id: user.uid,
           email: user.email,
           displayName: user.displayName, password: ''
         });

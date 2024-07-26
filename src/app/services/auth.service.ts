@@ -21,6 +21,7 @@ import { from, Observable } from 'rxjs';
 import { Member } from '../models/member.model';
 
 export interface Credential {
+  id?: string;
   email: string;
   password: string;
   displayName?: string;
@@ -35,7 +36,8 @@ export class AuthService {
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
   messageService = inject(MessageService);
-  readonly authState$ = authState(this.auth);
+  authState$ = authState(this.auth);
+  currentUser$ = authState(this.auth);
 
   user$ = user(this.auth);
   /** user logged in or not */
@@ -66,6 +68,7 @@ export class AuthService {
   }
 
   constructor() {
+
   }
 
   /** Toast */

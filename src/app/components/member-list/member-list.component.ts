@@ -12,6 +12,11 @@ import { MemberDetailComponent } from '../member-detail/member-detail.component'
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MembersDetailComponent } from '../members-detail/members-detail.component';
+import { MemberService } from '../../services/member.service';
+import { Subscription, take } from 'rxjs';
+import { user } from '@angular/fire/auth';
+import { doc, docData, Firestore } from '@angular/fire/firestore';
+import { uid } from 'chart.js/helpers';
 
 @UntilDestroy({arrayName: 'subscriptions'})
 @Component({
@@ -99,20 +104,24 @@ import { MembersDetailComponent } from '../members-detail/members-detail.compone
                           size="small"
                           [rounded]="true" severity="info"
                           icon="pi pi-list" (click)="showDialog(member)"/>
-                <p-button class="mr-1"
-                          pTooltip="แก้ไขข้อมูล"
-                          tooltipPosition="bottom"
-                          [outlined]="true"
-                          size="small"
-                          [rounded]="true" severity="success"
-                          icon="pi pi-pencil" (click)="onUpdate(member)"/>
-                <p-button
-                  pTooltip="ลบข้อมูล"
-                  tooltipPosition="bottom"
-                  [outlined]="true"
-                  size="small"
-                  [rounded]="true" severity="danger"
-                  icon="pi pi-trash" (click)="deleteItem(member)"/>
+
+                @if (canDo) {
+                  <p-button class="mr-1"
+                            pTooltip="แก้ไขข้อมูล"
+                            tooltipPosition="bottom"
+                            [outlined]="true"
+                            size="small"
+                            [rounded]="true" severity="success"
+                            icon="pi pi-pencil" (click)="onUpdate(member)"/>
+                  <p-button
+                    pTooltip="ลบข้อมูล"
+                    tooltipPosition="bottom"
+                    [outlined]="true"
+                    size="small"
+                    [rounded]="true" severity="danger"
+                    icon="pi pi-trash" (click)="deleteItem(member)"/>
+                }
+
                 <!-- template -->
                 <!--<p-button
                   [outlined]="true"
@@ -125,7 +134,6 @@ import { MembersDetailComponent } from '../members-detail/members-detail.compone
         </p-table>
       </div>
     </div>
-
   `,
   styles: `
 
@@ -154,11 +162,14 @@ import { MembersDetailComponent } from '../members-detail/members-detail.compone
 })
 export class MemberListComponent implements OnInit, OnDestroy {
   memberService = inject(AuthService);
+  userService = inject(MemberService);
   data = model('');
   dialog = inject(MatDialog);
+  firestore = inject(Firestore);
 
   dialogService = inject(DialogService);
   ref: DynamicDialogRef | undefined;
+  canDo: boolean = true;
 
   members!: Member[];
   member!: Member;
@@ -168,9 +179,19 @@ export class MemberListComponent implements OnInit, OnDestroy {
     'ร.ต.อ.', 'พ.ต.ต.', 'พ.ต.ท.', 'พ.ต.อ.'
   ];
 
-
   ngOnInit() {
     this.loadMembers();
+    this.checkRole();
+  }
+
+  private checkRole() {
+    this.userService.userProfile$.pipe(take(1)).subscribe((user) => {
+      if (user) {
+        this.canDo = user?.role == 'admin';
+
+      }
+    //  console.log(user?.email, ' D: ', user?.displayName, ' ', user?.role, ' ', user?.uid);
+    });
   }
 
   loadMembers() {
@@ -246,10 +267,10 @@ export class MemberListComponent implements OnInit, OnDestroy {
         data: member,
         header: 'รายละเอียดสมาชิก',
         width: '40vw',
-        contentStyle: { overflowX: 'auto' },
+        contentStyle: {overflow: 'auto'},
         breakpoints: {
           '960px': '75vw',
-          '648': '100vw'
+          '640': '100vw'
         }
       });
   }
@@ -259,4 +280,5 @@ export class MemberListComponent implements OnInit, OnDestroy {
       this.ref.close();
     }
   }
+
 }

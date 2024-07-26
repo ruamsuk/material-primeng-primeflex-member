@@ -9,8 +9,8 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     canActivate: [authGuard],
-    loadComponent: () => import('./components/home/home.component')
-      .then(m => m.HomeComponent),
+    loadComponent: () => import('./components/landing/landing.component')
+      .then(m => m.LandingComponent),
   },
   {
     path: 'auth',

@@ -1,10 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, model, OnDestroy, OnInit } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { MenuItem, PrimeTemplate } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ImportsModule } from '../../imposts';
+import { MemberService } from '../../services/member.service';
+import { UserProfile } from '../../models/user-profile.model';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { UserDetailComponent } from '../users/user-detail/user-detail.component';
 
 @Component({
   selector: 'app-home',
@@ -77,32 +81,51 @@ import { ImportsModule } from '../../imposts';
           </ng-container>
         </ng-template>
         <ng-template pTemplate="end">
-
-          <div class="flex align-items-center gap-2">
-            <span class="text-blue-600">User: {{ userDetail }}</span>
-            <p-button
-              [text]="true"
-              size="small"
-              icon="pi pi-sign-out"
-              severity="secondary"
-              pTooltip="Log out"
-              tooltipPosition="right"
-              (click)="authService.logout()"
-            />
-
+          <div *ngIf="user$ | async as user">
+            <div class="flex align-items-center gap-2">
+              <span id="user" (click)="userDialog(user)"
+                    class="text-blue-600 sarabun">
+                User: {{ user.displayName ? user.displayName : user.email }}
+              </span>
+              @if (user.role) {
+                <span class="text-red-500">
+                  [{{ user.role | uppercase }}]
+                </span>
+              }
+              <p-button
+                [text]="true"
+                size="small"
+                icon="pi pi-sign-out"
+                severity="secondary"
+                pTooltip="Log out"
+                tooltipPosition="right"
+                (click)="authService.logout()"
+              />
+            </div>
           </div>
+
         </ng-template>
       </p-menubar>
     </div>
   `,
-  styles: ``
+  styles: `
+    #user:hover {
+      cursor: pointer;
+    }
+  `
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   items: MenuItem[] | undefined;
   userDetail: string | undefined | null = null;
 
+  dialogService = inject(DialogService);
+  ref: DynamicDialogRef | undefined;
+
   authService = inject(AuthService);
+  memberService = inject(MemberService);
   router = inject(Router);
+  user$ = this.memberService.userProfile$;
+  data = model('');
 
   ngOnInit() {
     /**  user is logged in or not */
@@ -146,9 +169,28 @@ export class HomeComponent implements OnInit {
     ];
 
   }
+
   //
 
-  private logout() {
-    this.authService.logout().catch();
+  async logout() {
+    await this.authService.logout().catch();
+  }
+
+  userDialog(user: any) {
+    this.ref = this.dialogService.open(UserDetailComponent, {
+      data: user,
+      header: 'รายละเอียดผู้ใช้งาน',
+      width: '50vw',
+      contentStyle: {overflow: 'auto'},
+      breakpoints: {
+        '960px': '75vw',
+        '640': '100vw',
+        '390': '100vw'
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.ref) this.ref.close();
   }
 }

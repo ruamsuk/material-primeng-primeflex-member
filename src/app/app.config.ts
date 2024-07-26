@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -16,6 +16,8 @@ import { MessageService } from 'primeng/api';
 import { ThaiDatepickerModule } from './thai-datepicker/thai-datepicker.module';
 import { DialogService } from 'primeng/dynamicdialog';
 import firebase from 'firebase/compat/app';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 firebase.initializeApp(environment.firbaseConfig);
 
@@ -37,5 +39,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(ThaiDatepickerModule),
     MessageService,
     DialogService,
+    AngularFireAuthModule,
+    { provide: FIREBASE_OPTIONS, useValue: initializeApp },
   ]
 };

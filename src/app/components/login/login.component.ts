@@ -206,11 +206,11 @@ export class LogInComponent implements OnDestroy {
   forgotPassword() {
     this.ref = this.dialogService.open(ForgotPasswordComponent, {
       header: 'Forgot Password',
-      width: '50vw',
+      width: '30vw',
       modal: true,
       breakpoints: {
-        '960px': '75vw',
-        '640px': '90vw',
+        '960px': '80vw',
+        '640px': '100vw',
       }
     });
   }
