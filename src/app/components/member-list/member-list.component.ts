@@ -8,15 +8,12 @@ import { ThaiDatePipe } from '../../pipe/thai-date.pipe';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MembersDialogComponent } from '../members-dialog/members-dialog.component';
-import { MemberDetailComponent } from '../member-detail/member-detail.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MembersDetailComponent } from '../members-detail/members-detail.component';
 import { MemberService } from '../../services/member.service';
-import { Subscription, take } from 'rxjs';
-import { user } from '@angular/fire/auth';
-import { doc, docData, Firestore } from '@angular/fire/firestore';
-import { uid } from 'chart.js/helpers';
+import { take } from 'rxjs';
+import { Firestore } from '@angular/fire/firestore';
 
 @UntilDestroy({arrayName: 'subscriptions'})
 @Component({
@@ -256,9 +253,9 @@ export class MemberListComponent implements OnInit, OnDestroy {
   }
 
   /** MatDialog */
-  onDetail(member: any) {
-    this.dialog.open(MemberDetailComponent, {data: member});
-  }
+  // onDetail(member: any) {
+  //   this.dialog.open(MemberDetailComponent, {data: member});
+  // }
 
   /** PrimeNG Dialog */
   showDialog(member: any) {

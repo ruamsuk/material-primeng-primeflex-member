@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ImportsModule } from '../../imposts';
 import { MemberService } from '../../services/member.service';
-import { UserProfile } from '../../models/user-profile.model';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
 

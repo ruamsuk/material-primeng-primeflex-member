@@ -26,12 +26,12 @@ export class MemberService {
       );
   }
 
-  userProfile(): Observable<UserProfile> {
-    const userId = this.auth.currentUserSig()?.id;
-    const ref = doc(this.firestore, 'users', 'userId');
-
-    return docData(ref) as Observable<UserProfile>;
-  }
+  // userProfile(): Observable<UserProfile> {
+  //   const userId = this.auth.currentUserSig()?.id;
+  //   const ref = doc(this.firestore, 'users', 'userId');
+  //
+  //   return docData(ref) as Observable<UserProfile>;
+  // }
 
   constructor() {
   }
