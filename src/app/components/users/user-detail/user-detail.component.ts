@@ -1,7 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Component, inject, OnDestroy } from '@angular/core';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ImportsModule } from '../../../imposts';
+import { UserEditComponent } from '../user-edit/user-edit.component';
+import { Footer } from 'primeng/api';
+import { MemberService } from '../../../services/member.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-user-detail',
@@ -10,7 +13,17 @@ import { ImportsModule } from '../../../imposts';
     ImportsModule
   ],
   template: `
+
     <hr class="h-px bg-gray-200 border-0">
+    <div class="flex justify-content-end">
+      <p-button class="sarabun"
+                icon="pi pi-external-link"
+                label="แก้ไขข้อมูล"
+                [outlined]="true"
+                severity="success"
+                (click)="editDialog()"
+      />
+    </div>
     <table class="table-striped">
       <tr>
         <th>DisplayName:</th>
@@ -42,17 +55,13 @@ import { ImportsModule } from '../../../imposts';
       </tr>
     </table>
     <hr class="h-px bg-gray-200 border-0">
-    <div class="flex justify-content-end">
-      <p-button
-        label="Close"
-        [text]="true"
-        severity="success" (onClick)="close()"/>
-    </div>
+
   `,
   styles: ``
 })
-export class UserDetailComponent {
-  auth = inject(AuthService);
+export class UserDetailComponent implements OnDestroy {
+  userService = inject(MemberService);
+  dialogService = inject(DialogService);
   ref = inject(DynamicDialogRef);
   userData = inject(DynamicDialogConfig);
   user!: any;
@@ -63,7 +72,33 @@ export class UserDetailComponent {
     }
   }
 
-  close() {
-    this.ref.close();
+  editDialog() {
+    this.ref = this.dialogService.open(UserEditComponent, {
+      header: 'แก้ไขข้อมูลผู้ใช้',
+      width: '27vw',
+      contentStyle: {overflow: 'auto'},
+      breakpoints: {
+        '1199px': '55vw',
+        '960px': '55vw',
+        '640': '90vw',
+        '390': '95vw'
+      },
+      modal: true,
+      dismissableMask: false,
+      data: this.userData,
+      closable: true
+    });
+
+    this.ref.onClose
+      .pipe(take(1))
+      .subscribe(() => {
+        this['user'] = this.userService.userProfile$.subscribe((user) => {
+          this.user = user;
+        });
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.ref) { this.ref.close() }
   }
 }

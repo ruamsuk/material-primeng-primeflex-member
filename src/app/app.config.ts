@@ -18,8 +18,11 @@ import { DialogService } from 'primeng/dynamicdialog';
 import firebase from 'firebase/compat/app';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 firebase.initializeApp(environment.firbaseConfig);
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,6 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firbaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
+    provideStorage(() => getStorage()),
     provideAppCheck(() => {
       const provider = new ReCaptchaV3Provider(environment.recaptcha3SiteKey);
       return initializeAppCheck(undefined, {
@@ -37,6 +41,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAnimationsAsync(),
     importProvidersFrom(ThaiDatepickerModule),
+    importProvidersFrom(AngularFireStorageModule),
     MessageService,
     DialogService,
     AngularFireAuthModule,

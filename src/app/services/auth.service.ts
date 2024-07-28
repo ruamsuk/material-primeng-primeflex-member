@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import {
   Auth,
   authState,
-  signInWithEmailAndPassword, user
+  signInWithEmailAndPassword, updateProfile, user
 } from '@angular/fire/auth';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
@@ -17,8 +17,10 @@ import {
   query,
   updateDoc
 } from '@angular/fire/firestore';
-import { from, Observable } from 'rxjs';
+import { concatMap, from, Observable, of } from 'rxjs';
 import { Member } from '../models/member.model';
+import firebase from 'firebase/compat/app';
+import UserInfo = firebase.UserInfo;
 
 export interface Credential {
   id?: string;
@@ -108,6 +110,17 @@ export class AuthService {
   deleteMember(id: string | undefined): Observable<any> {
     const docRef = doc(this.firestore, `members/${id}`);
     return from(deleteDoc(docRef));
+  }
+
+  updateProfileData(profileData: Partial<UserInfo>): Observable<any> {
+    const user = this.auth.currentUser;
+    return of(user).pipe(
+      concatMap(user => {
+        if (!user) throw new Error('Not Authenticated');
+
+        return updateProfile(user, profileData);
+      })
+    );
   }
 
 }

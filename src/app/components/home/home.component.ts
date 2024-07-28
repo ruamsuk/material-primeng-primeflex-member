@@ -9,6 +9,8 @@ import { MemberService } from '../../services/member.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
 
+import { Footer } from '../users/footer/footer.component';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -132,7 +134,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (user) {
         this.authService.currentUserSig.set({
           email: user.email,
-          displayName: user.displayName, password: ''
+          displayName: user.displayName, password: '',
+
         });
         this.userDetail = this.authService.currentUserSig()?.email
           ? this.authService.currentUserSig()?.email
@@ -140,7 +143,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       } else {
         this.authService.currentUserSig.set(null);
       }
-      // console.log(this.authService.currentUserSig());
     });
 
     this.items = [
@@ -179,13 +181,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ref = this.dialogService.open(UserDetailComponent, {
       data: user,
       header: 'รายละเอียดผู้ใช้งาน',
-      width: '50vw',
+      width: '30vw',
       contentStyle: {overflow: 'auto'},
       breakpoints: {
-        '960px': '75vw',
-        '640': '100vw',
-        '390': '100vw'
-      }
+        '1199px': '55vw',
+        '960px': '45vw',
+        '640': '90vw',
+        '390': '95vw'
+      },
+      templates: {
+        footer: Footer
+      },
+      closable: true
     });
   }
 

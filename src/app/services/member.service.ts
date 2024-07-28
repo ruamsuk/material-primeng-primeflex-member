@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { doc, docData, Firestore } from '@angular/fire/firestore';
+import { doc, docData, Firestore, updateDoc } from '@angular/fire/firestore';
 import { UserProfile } from '../models/user-profile.model';
-import { Observable, of, switchMap } from 'rxjs';
+import { from, Observable, of, switchMap } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import User = firebase.User;
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class MemberService {
       .pipe(switchMap((user: User | null) => {
           if (user?.uid) {
             const ref = doc(this.firestore, 'users', user?.uid);
-            return docData(ref);
+            return docData(ref) as Observable<UserProfile>;
           } else {
             return of(null);
           }
@@ -34,5 +35,10 @@ export class MemberService {
   // }
 
   constructor() {
+  }
+
+  updateUser(user: any) {
+    const ref = doc(this.firestore, 'users', `${user.uid}`);
+    return from(updateDoc(ref, {...user}));
   }
 }
