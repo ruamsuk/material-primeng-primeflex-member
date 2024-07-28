@@ -9,8 +9,7 @@ import { Button } from 'primeng/button';
 import { UserProfile } from '../../../models/user-profile.model';
 import { ImportsModule } from '../../../imposts';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-import { getStorage, ref } from '@angular/fire/storage';
-import { close } from 'node:fs';
+import { getStorage } from '@angular/fire/storage';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
@@ -188,7 +187,8 @@ export class UserEditComponent implements OnDestroy {
     this.userService
       .updateUser(profileData)
       .subscribe({
-        next: value => {
+        next: () => {
+          // nothing here
         },
         complete: () => {
           this.authService.showSuccess('Profile saved successfully');

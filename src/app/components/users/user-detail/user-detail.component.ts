@@ -2,7 +2,6 @@ import { Component, inject, OnDestroy } from '@angular/core';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ImportsModule } from '../../../imposts';
 import { UserEditComponent } from '../user-edit/user-edit.component';
-import { Footer } from 'primeng/api';
 import { MemberService } from '../../../services/member.service';
 import { take } from 'rxjs';
 
