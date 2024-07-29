@@ -5,6 +5,7 @@ import { UserProfile } from '../models/user-profile.model';
 import { from, Observable, of, switchMap } from 'rxjs';
 import firebase from 'firebase/compat/app';
 import User = firebase.User;
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 
 @Injectable({
@@ -12,6 +13,7 @@ import User = firebase.User;
 })
 export class MemberService {
   auth = inject(AuthService);
+  afAuth = inject(AngularFireAuth);
   firestore = inject(Firestore);
 
   get userProfile$(): Observable<UserProfile | null > {
@@ -25,6 +27,12 @@ export class MemberService {
           }
         })
       );
+  }
+
+  async sendVerifyEmail(): Promise<void | undefined> {
+    return await this.afAuth.currentUser.then((user) => {
+      return user?.sendEmailVerification();
+    });
   }
 
   // userProfile(): Observable<UserProfile> {

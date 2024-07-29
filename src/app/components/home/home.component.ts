@@ -185,7 +185,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       contentStyle: {overflow: 'auto'},
       breakpoints: {
         '1199px': '55vw',
-        '960px': '45vw',
+        '960px': '90vw',
         '640': '90vw',
         '390': '95vw'
       },

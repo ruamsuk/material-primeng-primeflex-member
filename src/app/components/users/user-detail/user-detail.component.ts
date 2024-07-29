@@ -5,6 +5,9 @@ import { UserEditComponent } from '../user-edit/user-edit.component';
 import { MemberService } from '../../../services/member.service';
 import { take } from 'rxjs';
 
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { getAuth } from '@angular/fire/auth';
+
 @Component({
   selector: 'app-user-detail',
   standalone: true,
@@ -25,7 +28,7 @@ import { take } from 'rxjs';
     </div>
     <table class="table-striped">
       <tr>
-        <th>DisplayName:</th>
+        <th>Display:</th>
         <td>
           {{ user.displayName }}
         </td>
@@ -52,6 +55,20 @@ import { take } from 'rxjs';
         </span>
         </td>
       </tr>
+      <tr>
+        <th>Verified:</th>
+        <td>
+          <div class="{{ userEmail ? 'text-green-600' : 'text-orange-400' }} font-bold">
+            {{ userEmail }}
+            @if (userEmail) {
+              <i class="pi pi-verified"></i>
+            } @else {
+              <i class="pi pi-times-circle"></i>
+            }
+          </div>
+        </td>
+      </tr>
+
     </table>
     <hr class="h-px bg-gray-200 border-0">
 
@@ -61,14 +78,19 @@ import { take } from 'rxjs';
 export class UserDetailComponent implements OnDestroy {
   userService = inject(MemberService);
   dialogService = inject(DialogService);
+  auth = inject(AngularFireAuth);
   ref = inject(DynamicDialogRef);
   userData = inject(DynamicDialogConfig);
-  user!: any;
+  userEmail: boolean | undefined;
+  user: any;
 
   constructor() {
     if (this.userData.data) {
       this['user'] = this.userData.data;
     }
+    const auth = getAuth();
+    this.userEmail = auth.currentUser?.emailVerified;
+
   }
 
   editDialog() {
@@ -78,7 +100,7 @@ export class UserDetailComponent implements OnDestroy {
       contentStyle: {overflow: 'auto'},
       breakpoints: {
         '1199px': '55vw',
-        '960px': '55vw',
+        '960px': '95vw',
         '640': '90vw',
         '390': '95vw'
       },
@@ -90,14 +112,18 @@ export class UserDetailComponent implements OnDestroy {
 
     this.ref.onClose
       .pipe(take(1))
-      .subscribe(() => {
-        this['user'] = this.userService.userProfile$.subscribe((user) => {
-          this.user = user;
-        });
-    });
+      .subscribe((b: boolean) => {
+        if (b) {
+          this['user'] = this.userService.userProfile$.subscribe((user) => {
+            this.user = user;
+          });
+        }
+      });
   }
 
   ngOnDestroy() {
-    if (this.ref) { this.ref.close() }
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 }

@@ -9,7 +9,7 @@ import { Button } from 'primeng/button';
     Button
   ],
   template: `
-    <div class="flex w-full justify-content-end">
+    <div class="flex w-full justify-content-end mt-2">
       <p-button
         type="button"
         label="Close"

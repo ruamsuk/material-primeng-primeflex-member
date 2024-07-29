@@ -11,6 +11,7 @@ import { ImportsModule } from '../../../imposts';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { getStorage } from '@angular/fire/storage';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { getAuth } from '@angular/fire/auth';
 
 @Component({
   imports: [
@@ -79,7 +80,6 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
                type="file"
                hidden="hidden"
                (change)="uploadImage($event, user)">
-        <div class="flex">&nbsp;</div>
       </div>
 
       <div class="card flex flex-wrap flex-column justify-content-center mt-3">
@@ -105,13 +105,22 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
             <label for="address">Address</label>
             <input class="w-full" type="text" pInputText id="address" formControlName="address">
           </div>
+          @if (!Email) {
+            <div class="field">
+              <p (click)="sendEmail()"
+                 class="text-orange-500 font-semibold cursor-pointer">
+                <i class="pi pi-check-circle"></i>
+                Click here to verify your email.
+              </p>
+            </div>
+          }
           <div class="field">
             <hr class="h-px bg-gray-200 border-0">
             <div class="flex mt-3">
               <p-button label="Cancel"
                         severity="secondary"
                         styleClass="w-full"
-                        class="w-full mr-2" (onClick)="close()"/>
+                        class="w-full mr-2" (onClick)="close(false)"/>
               <p-button label="Save"
                         styleClass="w-full"
                         class="w-full" (onClick)="saveProfile()"/>
@@ -134,6 +143,7 @@ export class UserEditComponent implements OnDestroy {
   user$ = this.userService.userProfile$;
   userProfile$ = this.authService.user$;
   userPhoto: any;
+  Email: boolean | undefined;
 
 
   profileForm = new FormGroup({
@@ -155,7 +165,11 @@ export class UserEditComponent implements OnDestroy {
     });
 
     this.userProfile$.subscribe((res: any) => {
-      this.userPhoto = res?.photoURL || '/images/dummy-user.png';
+      const auth = getAuth();
+      this.Email = auth.currentUser?.emailVerified;
+      if (res) {
+        this.userPhoto = res?.photoURL || '/images/dummy-user.png';
+      }
     });
   }
 
@@ -192,7 +206,7 @@ export class UserEditComponent implements OnDestroy {
         },
         complete: () => {
           this.authService.showSuccess('Profile saved successfully');
-          this.close();
+          this.close(true);
         },
         error: (err: Error) => {
           this.authService.showError(`Error saving profile: ${err.message}`);
@@ -200,12 +214,22 @@ export class UserEditComponent implements OnDestroy {
       });
   }
 
-  close() {
-    this.ref.close();
+  close(b: boolean) {
+    this.ref.close(b);
   }
 
   ngOnDestroy() {
     if (this.ref) this.ref.close();
   }
 
+  sendEmail() {
+    this.userService.sendVerifyEmail()
+      .then(() => {
+        this.authService.showSuccess('Email successfully sent');
+      })
+      .catch((err: Error) => {
+        this.authService.showError(`Error sending email: ${err.message}`);
+      })
+      .finally();
+  }
 }
