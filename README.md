@@ -60,6 +60,23 @@ ng build --allowed-common-js-dependencies *  --base-href  https://member-dc3a5.w
 ในไฟล์ tsconfig.json ตั้งค่า "allowSyntheticDefaultImports": true ในส่วนของ compilerOptions 
 ค่านี้อนุญาตให้ใช้ default imports จาก CommonJS modules ได้
 ```
+- ใน angular.json
+
+```typescript
+    .....
+"architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "allowedCommonJsDependencies": [ // เพิ่มอันนี้
+              "moment",
+              "quill",
+              "quill-delta"
+            ], // ปิดตรงนี้นะ
+            "outputPath": "dist",
+            .....
+```
+
 - ถ้าตอน build ไม่ใส่ --base-href ... จะมีข้อความเตือนแบบนี้.-
 ```html
 No Firebase app associated with site member-dc3a5, injecting project default config.

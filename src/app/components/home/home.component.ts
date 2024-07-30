@@ -84,9 +84,12 @@ import { Footer } from '../users/footer/footer.component';
         <ng-template pTemplate="end">
           <div *ngIf="user$ | async as user">
             <div class="flex align-items-center gap-2">
+              <span class="hidden md:block font-bold text-green-600">
+                User:
+              </span>
               <span id="user" (click)="userDialog(user)"
                     class="text-blue-600 sarabun">
-                User: {{ user.displayName ? user.displayName : user.email }}
+                {{ user.displayName ? user.displayName : user.email }}
               </span>
               @if (user.role) {
                 <span class="text-red-500">
@@ -186,8 +189,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       breakpoints: {
         '1199px': '55vw',
         '960px': '90vw',
-        '640': '90vw',
-        '390': '95vw'
+        '640': '80vw',
+        '390': '80vw'
       },
       templates: {
         footer: Footer

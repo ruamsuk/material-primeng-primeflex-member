@@ -100,8 +100,9 @@ export class UserDetailComponent implements OnDestroy {
       contentStyle: {overflow: 'auto'},
       breakpoints: {
         '1199px': '55vw',
-        '960px': '95vw',
-        '640': '90vw',
+        '960px': '85vw',
+        '845': '50vw',
+        '640': '80vw',
         '390': '95vw'
       },
       modal: true,

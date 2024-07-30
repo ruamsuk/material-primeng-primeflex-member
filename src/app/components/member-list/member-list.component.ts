@@ -55,7 +55,7 @@ import { Firestore } from '@angular/fire/firestore';
           <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
               <span>
-                <p-button (click)="openNew()" size="small" icon="pi pi-plus"/>
+                <p-button (click)="openNew()" [disabled]="!canDo" size="small" icon="pi pi-plus"/>
               </span>
               <p-iconField iconPosition="left" class="ml-auto">
                 <p-inputIcon>
@@ -266,8 +266,9 @@ export class MemberListComponent implements OnInit, OnDestroy {
         width: '40vw',
         contentStyle: {overflow: 'auto'},
         breakpoints: {
-          '960px': '75vw',
-          '640': '100vw'
+          '960px': '90vw',
+          '640': '85vw',
+          '390': '95vw'
         }
       });
   }
